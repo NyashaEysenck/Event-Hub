@@ -1,6 +1,6 @@
 import google.generativeai as genai
 
-YOUR_API_KEY="AIzaSyDbTLapLT1Bxdsld7atQXG9YOtpfzPCsqE"
+YOUR_API_KEY=""
 
 def generate_suggestions_function(event_title):
     """
