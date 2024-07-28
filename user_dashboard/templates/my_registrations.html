@@ -1,0 +1,55 @@
+<!-- my_registrations.html -->
+{% extends "base.html" %}
+
+{% block title %}My Registrations{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">My Registrations</h2>
+
+    <!-- Attended Events -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title">Attended Events</h3>
+            <ul class="list-group">
+                {% for registration in attended_events %}
+                <li class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ registration.event.title }}</h5>
+                        <small>{{ registration.event.end_date|date:"F j, Y" }}</small>
+                    </div>
+                    <p class="mb-1">{{ registration.event.description }}</p>
+                    <p class="mb-1"><strong>Location:</strong> {{ registration.event.location }}</p>
+                    <a href="{% url 'provide_feedback' registration.event.id %}" class="btn btn-primary btn-sm">Provide Feedback</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Current Registered Events -->
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Current Registered Events</h3>
+            <ul class="list-group">
+                {% for registration in current_events %}
+                <li class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ registration.event.title }}</h5>
+                        <small>{{ registration.event.start_date|date:"F j, Y" }}</small>
+                    </div>
+                    <p class="mb-1">{{ registration.event.description }}</p>
+                    <p class="mb-1"><strong>Location:</strong> {{ registration.event.location }}</p>
+                    
+                    <!-- Form for canceling registration -->
+                    <form action="{% url 'cancel_registration' registration.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Cancel Registration</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

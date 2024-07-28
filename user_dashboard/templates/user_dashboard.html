@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4">Dashboard</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h2>My Events</h2>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {% if my_events %}
+                        <ul class="list-group list-group-flush">
+                            {% for event in my_events %}
+                                <li class="list-group-item">
+                                    <h5>{{ event.title }}</h5>
+                                    <p>{{ event.description }}</p>
+                                    <p><strong>Date:</strong> {{ event.start_date }}</p>
+                                    <p><strong>Location:</strong> {{ event.location }}</p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">You have not registered for any events yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <h2>Upcoming Events</h2>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {% if upcoming_events %}
+                        <ul class="list-group list-group-flush">
+                            {% for event in upcoming_events %}
+                                <li class="list-group-item">
+                                    <h5>{{ event.title }}</h5>
+                                    <p>{{ event.description }}</p>
+                                    <p><strong>Date:</strong> {{ event.start_date }}</p>
+                                    <p><strong>Location:</strong> {{ event.location }}</p>
+                                    <a href="{% url 'event_details' event.id %}" class="btn btn-primary">View Details</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No upcoming events available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

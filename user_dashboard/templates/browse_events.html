@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Events{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Browse Events</h2>
+    
+    <!-- Filters -->
+    <form method="GET" class="mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="date" name="date" class="form-control" placeholder="Date">
+            </div>
+            <div class="col-md-4">
+                <select name="category" class="form-control">
+                    <option value="">All Categories</option>
+                        {% for category in categories %}
+                    <option value="{{ category.name }}">{{ category.name }}</option>
+                        {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select name="type" class="form-control">
+                    <option value="">All Types</option>
+                    <option value="seminar">Seminar</option>
+                    <option value="conference">Conference</option>
+                    <option value="workshop">Workshop</option>
+                    <option value="concert">Concert</option>
+                    <option value="exhibition">Exhibition</option>
+                    <option value="competition">Competition</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Filter</button>
+    </form>
+
+    <!-- Event List -->
+    <ul class="list-group">
+        {% for event in events %}
+        <li class="list-group-item mb-3">
+            <h5 class="mb-2">{{ event.title }}</h5>
+            <p class="mb-1">{{ event.description }}</p>
+            <p class="mb-1"><strong>Date:</strong> {{ event.start_date|date:"F j, Y, g:i a" }} - {{ event.end_date|date:"F j, Y, g:i a" }}</p>
+            <p class="mb-1"><strong>Location:</strong> {{ event.location }}</p>
+            <a href="{% url 'event_details' event.id %}" class="btn btn-primary mt-2">View Details</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

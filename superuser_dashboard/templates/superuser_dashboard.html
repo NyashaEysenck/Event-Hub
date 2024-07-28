@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Superuser Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Superuser Dashboard</h2>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Upcoming Events</h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for event in upcoming_events %}
+                    <li class="list-group-item">
+                        <h5 class="mb-1">{{ event.title }}</h5>
+                        <p class="mb-1">{{ event.description }}</p>
+                        <small><strong>Date:</strong> {{ event.start_date }} - {{ event.end_date }}</small><br>
+                        <small><strong>Location:</strong> {{ event.location }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Recent Registrations</h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for registration in recent_registrations %}
+                    <li class="list-group-item">
+                        <h5 class="mb-1">{{ registration.event.title }}</h5>
+                        <small>{{ registration.user.username }} registered on {{ registration.registration_datetime }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">Event Sentiment Analysis</h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for event_name, sentiment in sentiment_data.items %}
+                    <li class="list-group-item">
+                        <h5 class="mb-1">Event Name : {{ event_name }}</h5>
+                        <small>Positive Feedback: {{ sentiment }}%</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>    
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-white">
+                    <h4 class="mb-0">Recent Feedback</h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for feedback in recent_feedback %}
+                    <li class="list-group-item">
+                        <h5 class="mb-1">{{ feedback.event.title }}</h5>
+                        <p class="mb-1">{{ feedback.user.username }}: {{ feedback.comments }}</p>
+                        <small><strong>Rating:</strong> {{ feedback.rating }}</small><br>
+                        <small><strong>Sentiment:</strong> {{ feedback.sentiment }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+{% endblock %}

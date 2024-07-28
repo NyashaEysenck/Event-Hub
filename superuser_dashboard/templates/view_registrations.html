@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}View Registrations{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card-header bg-primary text-white">
+        <h1>View Registrations</h1>
+    </div>
+    <form method="GET" action="{% url 'view_registrations' %}" class="mb-4">
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="eventFilter">Event</label>
+                <select id="eventFilter" name="event" class="form-control">
+                    <option value="">All Events</option>
+                    {% for event in events %}
+                    <option value="{{ event.id }}" {% if request.GET.event == event.id|stringformat:"s" %}selected{% endif %}>{{ event.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="userFilter">User</label>
+                <select id="userFilter" name="user" class="form-control">
+                    <option value="">All Users</option>
+                    {% for user in users %}
+                    <option value="{{ user.id }}" {% if request.GET.user == user.id|stringformat:"s" %}selected{% endif %}>{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="dateFilter">Date</label>
+                <input type="date" id="dateFilter" name="date" class="form-control" value="{{ request.GET.date }}">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>User</th>
+                    <th>Registration Date & Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registration in registrations %}
+                <tr>
+                    <td>{{ registration.event.title }}</td>
+                    <td>{{ registration.user.username }}</td>
+                    <td>{{ registration.registration_datetime }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Download Button -->
+    <button id="downloadRegistrationsBtn" class="btn btn-success mt-3">Download Registrations</button>
+</div>
+
+<script>
+    // Function to download registrations as CSV
+    document.getElementById('downloadRegistrationsBtn').addEventListener('click', function() {
+        // Prepare CSV content
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Event,User,Registration Date & Time\n";
+        
+        // Append each registration data to CSV content
+        {% for registration in registrations %}
+            csvContent += `"{{ registration.event.title }}","{{ registration.user.username }}","{{ registration.registration_datetime }}"\n`;
+        {% endfor %}
+        
+        // Create hidden anchor element and trigger download
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "registrations.csv");
+        document.body.appendChild(link); // Required for FF
+        link.click(); // Trigger the download
+    });
+</script>
+
+{% endblock %}

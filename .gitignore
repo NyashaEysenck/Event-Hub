@@ -1,0 +1,16 @@
+# Django log files
+django.log
+
+# SQLite database file
+db.sqlite3
+
+# Environment variables
+.env
+
+# Python bytecode
+__pycache__/
+*.pyc
+.ipynb_checkpoints
+
+# Virtual environment
+venv/

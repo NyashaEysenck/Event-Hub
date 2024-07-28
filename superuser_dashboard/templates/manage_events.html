@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Events{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card-header bg-success text-white">
+                <h2>Add Event</h2>
+            </div>
+            <form method="post" action="{% url 'add_event' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_title">Title</label>
+                    <input type="text" class="form-control" id="id_title" name="title" required>
+                </div>
+                <div class="form-group">
+             
+                    <label for="id_description">Description</label>
+                    <button type="button" id="getSuggestionsBtn" class="btn btn-success ml-2">Get Suggestions</button>
+                    <div id="suggestions" class="mt-3"></div>
+
+                    <textarea class="form-control" id="id_description" name="description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="id_category">Category</label>
+                    <select class="form-control" id="id_category" name="category">
+                        {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_start_date">Start Date and Time</label>
+                    <input type="datetime-local" class="form-control" id="id_start_date" name="start_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_end_date">End Date and Time</label>
+                    <input type="datetime-local" class="form-control" id="id_end_date" name="end_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_location">Location</label>
+                    <input type="text" class="form-control" id="id_location" name="location" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Event</button>
+               
+            </form>
+        </div>
+        <div class="col-md-6">
+            <div class="card-header bg-primary text-white">
+                <h2>Manage Events</h2>
+            </div>
+            <div class="event-list-container mt-3" style="max-height: 600px; overflow-y: auto;">
+                <ul class="list-group">
+                    {% for event in events %}
+                    <li class="list-group-item">
+                    <h5>{{ event.title }}</h5>
+                    <p>{{ event.description }}</p>
+                    <p><strong>Date:</strong> {{ event.start_date|date:"F d, Y H:i" }} - {{ event.end_date|date:"F d, Y H:i" }}</p>
+                    <p><strong>Location:</strong> {{ event.location }}</p>
+                    <a href="{% url 'edit_event' event.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete_event' event.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+ <script>
+    if (window.jQuery) {
+        console.log('jQuery is loaded!');
+    } else {
+        console.log('jQuery is NOT loaded!');
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#getSuggestionsBtn').click(function() {
+            console.log('Button clicked!')
+            const title = $('#id_title').val().trim();
+            if (title.length > 0) {
+                $.getJSON(`/super/api/generate_suggestions/?title=${encodeURIComponent(title)}`, function(data) {
+                    $('#suggestions').empty();
+                    if (data.length > 0) {
+                        data.forEach(function(suggestion) {
+                            $('#suggestions').append(`<p>${suggestion}</p>`);
+                        });
+                    } else {
+                        $('#suggestions').append('<p>No suggestions available</p>');
+                    }
+                });
+            } else {
+                $('#suggestions').empty().append('<p>Please enter an event title.</p>');
+            }
+        });
+    });
+</script>
+{% endblock %}
