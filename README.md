@@ -123,6 +123,10 @@ To run tests, use:
 
 ###  Notebooks
 The notebooks folder contains Jupyter notebooks for model training and analysis.
+
+### Screenshots
+See screenshots folder for example screenshots of app usage
+
 License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
